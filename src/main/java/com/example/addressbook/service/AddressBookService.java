@@ -3,27 +3,27 @@ package com.example.addressbook.service;
 import com.example.addressbook.dto.AddressBookDTO;
 import com.example.addressbook.model.AddressBook;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-// Service class implementing business logic
 @Service
 public class AddressBookService implements IAddressBookService {
-    private final List<AddressBook> addressBookList = new ArrayList<>();
+    private final Map<Long, AddressBook> addressBookMap = new HashMap<>();
+    private long idCounter = 1;
 
-    // Get all stored contacts
+    // Get all contacts
     @Override
     public List<AddressBook> getAllContacts() {
-        return addressBookList;
+        return new ArrayList<>(addressBookMap.values());
     }
 
-    // Add a new contact to the list
+    // Add a new contact with an auto-generated ID
     @Override
     public AddressBook addContact(AddressBookDTO addressBookDTO) {
         AddressBook newContact = new AddressBook();
+        newContact.setId(idCounter++);
         newContact.setName(addressBookDTO.getName());
         newContact.setAddress(addressBookDTO.getAddress());
-        addressBookList.add(newContact);
+        addressBookMap.put(newContact.getId(), newContact);
         return newContact;
     }
 }
